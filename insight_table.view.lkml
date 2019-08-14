@@ -1,0 +1,4 @@
+view: insight_table {
+
+
+}
