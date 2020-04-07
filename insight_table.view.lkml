@@ -3,18 +3,44 @@ view: insight_table {
   derived_table: {
     sql:
 
-    select
-        *
+select
+  *
+from
+  (select
+      *
+      ,'current' as version
+      ,case when aa_score_22sep2015 > 1.5 then 1.50 else round(aa_score_22sep2015*1.00,1) end as member_score
     from
       insight
+   )a
+union all
+  (select
+      *
+      ,'new' as version
+      ,case when aa_score_22sep2015 > 1.5 then 1.50 else round(aa_score_22sep2015*1.00,1) end as member_score
+   from
+    staging_insight_row
+    )
+
 
 
        ;;
   }
 
+  dimension: Version {
+    type: string
+    sql: version ;;
+
+  }
+
   dimension: live_member  {
     type: string
     sql: live_member ;;
+  }
+
+  dimension: member_score {
+    type: number
+    sql: member_score ;;
   }
 
   dimension: live_product_count  {
@@ -62,7 +88,17 @@ view: insight_table {
   }
 
 
+  dimension: acceptance {
+    type: string
+    sql: case when live_member = 'Y' and aa_score_22sep2015 < 1.1 then 'Member'
+              when live_member = 'N' and aa_score_22sep2015 < 1.1 and aa_score_22sep2015 > 0 and tenure_current > 0 then 'Ex-Member'
+              when Live_member = 'N'
+                   and (HOME_HISTORY = 'C' or HOME_HISTORY = 'X')
+                   /*and aa_score_22sep2015 < 1.1*/ then 'Home'
 
+              else 'Unacceptable' end ;;
+
+  }
 
 
   measure: Count {

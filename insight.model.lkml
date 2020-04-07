@@ -10,3 +10,4 @@ datagroup: insight_table_datagroup {
 persist_with: insight_table_datagroup
 
 explore: insight_table {}
+explore: insight_quote_matching {}
