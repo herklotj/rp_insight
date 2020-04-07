@@ -87,6 +87,18 @@ union all
     sql:  tenure_current;;
   }
 
+  dimension: total_callouts {
+    type: tier
+    tiers: [1,2,3,4]
+    style: integer
+    sql:  total_callouts;;
+  }
+
+  dimension:payment_type  {
+    type: string
+    sql: dri_pmt_type ;;
+  }
+
 
   dimension: acceptance {
     type: string
