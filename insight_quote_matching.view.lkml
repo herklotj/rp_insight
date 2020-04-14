@@ -21,9 +21,13 @@ derived_table: {
     ,case when rct_noquote_an = 1 then 0 else 1 end as Actual_Quoted
   from
     (select *
+            ,upper(squeeze(concat(left(replace(replace(replace(drv.surname,' ',''),'''',''),'-',''),5),'_',left(replace(forename,' ',''),1)))) as ck_suff
      from
-        qs_cover
-     where customer_key <> '' and to_date(sysdate) - to_date(quote_dttm ) < 90
+        qs_cover c
+     inner join
+        qs_drivers drv
+        on c.quote_id = drv.quote_id and drv.driver_id = 0
+     where customer_key <> '' and to_date(sysdate) - to_date(c.quote_dttm ) < 90
      ) cov
 
 left join
@@ -45,7 +49,7 @@ left join
      from
         insight
      )ins_old
-    on cov.customer_key = ins_old.customer_key
+    on left(ins_old.qas_premise_id,8) = cov.qqas1_address_key1 and cov.ck_suff = ins_old.ck_suffix
     and ins_old.match_type <> 'No Match'
 
 left join
@@ -67,7 +71,7 @@ left join
      from
         staging_insight_row
      )ins_new
-    on cov.customer_key = ins_new.customer_key
+    on left(ins_new.qas_premise_id,8) = cov.qqas1_address_key1 and cov.ck_suff = ins_new.ck_suffix
     and ins_new.Match_type <> 'No Match'
 
          ;;
