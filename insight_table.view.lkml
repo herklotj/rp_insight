@@ -115,7 +115,6 @@ union all
 
   measure: Count {
     type: count
-
   }
 
   measure: breakdowns_ever {
@@ -148,6 +147,11 @@ union all
     type: number
     sql: ${current_home}/nullif(${live_member_count},0)  ;;
     value_format_name: percent_1
+  }
+
+measure: Addresses {
+  type: sum
+  sql: case when qas_premise_id = '' then 0 else 1 end ;;
   }
 
 }
