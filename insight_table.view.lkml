@@ -80,6 +80,13 @@ union all
     sql:  age;;
   }
 
+  dimension: age2 {
+    type: tier
+    tiers: [20,21,22,23,24,25,30,40,50,60,70,80,90]
+    style: integer
+    sql:  age;;
+  }
+
   dimension: tenure_current {
     type: tier
     tiers: [5,10,20,30,40]
